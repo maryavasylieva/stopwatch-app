@@ -1,13 +1,53 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { Observables } from "rxjs";
+import { interval } from "rxjs";
+import { map } from "rxjs/operators";
 
 const Counter = () => {
   const [isStart, setIsStart] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isWait, setIsWait] = useState(false);
   const [time, setTime] = useState(0);
-  const counterRef = useRef();
+  const [subscription, setSubscription] = useState("");
+  const [prevent, setPrevent] = useState(false);
+  const [timeDifference, setTimeDifference] = useState(0);
+
+  const everySecond$ = interval(1000).pipe(map((val) => val + 1));
+
+  const handleStart = () => {
+    const subscribe = everySecond$.subscribe((val) => setTime(val + time));
+
+    setSubscription(subscribe);
+    setIsStart(true);
+  };
+
+  const handleStop = () => {
+    subscription.unsubscribe();
+    setTime(0);
+  };
+
+  const handleReset = () => {
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+
+    const subscribe = interval(1000).subscribe((val) => setTime(val));
+    setSubscription(subscribe);
+  };
+
+  const handleWait = () => {
+    if (prevent) {
+      setPrevent(false);
+      const interval = setTimeout(() => {
+        setPrevent(true);
+        clearInterval(interval);
+      }, 300);
+    } else {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+
+      setTimeDifference(time);
+    }
+  };
 
   const renderTime = () => {
     const getSeconds = `0${time % 60}`.slice(-2);
@@ -16,32 +56,6 @@ const Counter = () => {
     const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
 
     return `${getHours} : ${getMinutes} : ${getSeconds}`;
-  };
-
-  const handleStart = () => {
-    counterRef.current = setInterval(() => {
-      setTime((time) => time + 1);
-    }, 1000);
-    setIsStart(true);
-    setIsPaused(false);
-  };
-
-  const handleStop = () => {
-    clearInterval(counterRef.current);
-    setIsPaused(true);
-    setTime(0);
-  };
-
-  const handleReset = () => {
-    setIsStart(true);
-    setIsPaused(false);
-    setTime(0);
-  };
-
-  const handleWait = () => {
-    console.log("Double click!");
-    clearInterval(counterRef.current);
-    setIsPaused(time);
   };
 
   return (
