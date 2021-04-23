@@ -24,7 +24,10 @@ const Counter = () => {
   };
 
   const handleStop = () => {
-    subscription.unsubscribe();
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+
     setTime(0);
     setSubscription("");
     setIsStart(false);
@@ -90,6 +93,7 @@ const Counter = () => {
   );
 };
 
+// TIMER STYLES
 const Container = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
