@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { interval } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { renderTime } from "../utils/renderTime";
+import TimerView from "./TimerView";
 
 const Counter = () => {
   const [time, setTime] = useState(0);
@@ -11,8 +11,6 @@ const Counter = () => {
   const [prevent, setPrevent] = useState(false);
   const [subscription, setSubscription] = useState("");
   const [timeDifference, setTimeDifference] = useState(0);
-
-  const { hours, minutes, seconds } = renderTime(time);
 
   const everySecond$ = interval(1000).pipe(map((val) => val + 1));
 
@@ -63,22 +61,8 @@ const Counter = () => {
 
   return (
     <Container>
-      <Wrapper>
-        <TimeWrapper>
-          <Timer>{hours}</Timer>
-          <TimeLabel>hours</TimeLabel>
-        </TimeWrapper>
+      <TimerView time={time} />
 
-        <TimeWrapper>
-          <Timer>{minutes}</Timer>
-          <TimeLabel>minutes</TimeLabel>
-        </TimeWrapper>
-
-        <TimeWrapper>
-          <Timer>{seconds}</Timer>
-          <TimeLabel>seconds</TimeLabel>
-        </TimeWrapper>
-      </Wrapper>
       <ButtonContainer>
         <Button onClick={handleStart}>Start</Button>
         <Button onClick={handleStop} disabled={!isStart}>
@@ -95,7 +79,7 @@ const Counter = () => {
   );
 };
 
-// TIMER STYLES
+// TIMER CONTAINER STYLES
 const Container = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
@@ -106,54 +90,6 @@ const Container = styled.div`
     0 15px 90px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-const TimeWrapper = styled.div`
-  text-align: center;
-  margin-right: 40px;
-  margin-left: 40px;
-  min-width: 90px;
-  position: relative;
-  &:not(:last-child):before,
-  &:not(:last-child):after {
-    content: "";
-    background-color: rgba(255, 255, 255, 0.3);
-    height: 5px;
-    width: 5px;
-    border-radius: 50%;
-    display: block;
-    position: absolute;
-    right: -42px;
-  }
-  &:not(:last-child):before {
-    top: 35%;
-  }
-  &:not(:last-child):after {
-    top: 50%;
-  }
-`;
-
-const Timer = styled.span`
-  font-family: "Titillium Web", sans-serif;
-  font-size: 50px;
-  &:before {
-    color: #fff;
-    font-size: 4.2rem;
-    text-transform: uppercase;
-  }
-`;
-
-const TimeLabel = styled.p`
-  color: rgba(255, 255, 255, 0.35);
-  text-transform: uppercase;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 12px;
-  margin-top: 10px;
 `;
 
 const ButtonContainer = styled.div`
