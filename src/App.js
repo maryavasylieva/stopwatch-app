@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import Counter from "./components/Counter";
 
 function App() {

@@ -12,6 +12,8 @@ const Counter = () => {
   const [subscription, setSubscription] = useState("");
   const [timeDifference, setTimeDifference] = useState(0);
 
+  const { hours, minutes, seconds } = renderTime(time);
+
   const everySecond$ = interval(1000).pipe(map((val) => val + 1));
 
   const handleStart = () => {
@@ -63,17 +65,17 @@ const Counter = () => {
     <Container>
       <Wrapper>
         <TimeWrapper>
-          <Timer>{renderTime(time).hours}</Timer>
+          <Timer>{hours}</Timer>
           <TimeLabel>hours</TimeLabel>
         </TimeWrapper>
 
         <TimeWrapper>
-          <Timer>{renderTime(time).minutes}</Timer>
+          <Timer>{minutes}</Timer>
           <TimeLabel>minutes</TimeLabel>
         </TimeWrapper>
 
         <TimeWrapper>
-          <Timer>{renderTime(time).seconds}</Timer>
+          <Timer>{seconds}</Timer>
           <TimeLabel>seconds</TimeLabel>
         </TimeWrapper>
       </Wrapper>
