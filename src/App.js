@@ -3,16 +3,22 @@ import Counter from "./components/Counter";
 
 function App() {
   return (
-    <div className="App">
-      <div>
-        <Title>Stopwatch</Title>
-      </div>
+    <Container>
+      <Title>Stopwatch</Title>
       <Counter />
-    </div>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+  color: white;
+`;
+
 const Title = styled.h1`
+  font-family: "Titillium Web", sans-serif;
+  font-size: 40px;
+  letter-spacing: 4px;
   text-align: center;
 `;
 
